@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.0.0</Version>
+    <Authors>Shaun Wilson algs4net@mrshaunwilson.com</Authors>
+    <Company>Shaun Wilson</Company>
+    <Description>A few fundamental algorithms implemented via C# using .NET Standard 2.0-compatible projects and language features.</Description>
+    <Copyright>Copyright (C) Shaun Wilson</Copyright>
+    <PackageLicenseUrl>https://github.com/wilson0x4d/algs4net/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/wilson0x4d/algs4net</PackageProjectUrl>
+    <PackageIconUrl>https://avatars0.githubusercontent.com/u/3208827</PackageIconUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <PackageTags>.netstandard algorithms algs algs4 algs4net cs-algorithms</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+</Project>
