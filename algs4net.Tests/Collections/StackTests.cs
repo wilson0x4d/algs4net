@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace algs4net.Tests.Collections
@@ -22,6 +23,7 @@ namespace algs4net.Tests.Collections
                 var actualValue = lifo.Pop();
                 Assert.AreEqual(expectedValue, actualValue);
             }
+            lifo.Trace();
         }
 
         [TestMethod]
@@ -39,6 +41,7 @@ namespace algs4net.Tests.Collections
                 Assert.AreEqual(expectedValues[i], actualValue);
                 i++;
             }
+            lifo.Trace();
         }
     }
 }

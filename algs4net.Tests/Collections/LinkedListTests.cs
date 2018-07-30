@@ -1,6 +1,7 @@
 ﻿using algs4net.Collections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace algs4net.Tests.Collections
@@ -25,7 +26,9 @@ namespace algs4net.Tests.Collections
                 i++;
             }
             Assert.AreEqual(expected.Length, i);
+            list.Trace();
         }
+
 
         [TestMethod]
         public void LinkedList_AddRange_PreservesOrder()
@@ -41,6 +44,7 @@ namespace algs4net.Tests.Collections
                 i++;
             }
             Assert.AreEqual(expected.Length, i);
+            list.Trace();
         }
 
         [TestMethod]
@@ -56,6 +60,7 @@ namespace algs4net.Tests.Collections
             var expected = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
             var list = new LinkedList<int>(expected);
             Assert.AreEqual(expected.Length, list.Count);
+            list.Trace();
         }
 
         [TestMethod]
@@ -72,6 +77,7 @@ namespace algs4net.Tests.Collections
                 list.Remove(expected.Length / 2);
             }
             Assert.AreEqual(expected.Length, i);
+            list.Trace();
         }
 
         [TestMethod]
@@ -86,6 +92,7 @@ namespace algs4net.Tests.Collections
                 i++;
             }
             Assert.AreEqual(expected.Length, i);
+            list.Trace();
         }
 
         [TestMethod]
@@ -114,6 +121,7 @@ namespace algs4net.Tests.Collections
                 Assert.IsTrue(list.RemoveAt(0, out int actualValue));
                 Assert.AreEqual(expectedValue, actualValue);
             }
+            list.Trace();
         }
 
         [TestMethod]
@@ -125,6 +133,7 @@ namespace algs4net.Tests.Collections
             Assert.AreEqual(4, list.Count);
             Assert.IsTrue(list.RemoveAt(0));
             Assert.AreEqual(5, list.First());
+            list.Trace();
         }
 
         [TestMethod]
@@ -153,6 +162,7 @@ namespace algs4net.Tests.Collections
                 Assert.IsTrue(list.RemoveAt(0, out int actualValue));
                 Assert.AreEqual(expectedValue, actualValue);
             }
+            list.Trace();
         }
 
         [TestMethod]
@@ -162,6 +172,7 @@ namespace algs4net.Tests.Collections
             var list2 = new LinkedList<int>();
             list1.Merge(list2);
             Assert.AreEqual(0, list1.Count);
+            list1.Trace();
         }
 
         [TestMethod]
@@ -178,6 +189,8 @@ namespace algs4net.Tests.Collections
                 i++;
             }
             Assert.AreEqual(expected.Length, i);
+            list1.Trace();
+            list2.Trace();
         }
 
         [TestMethod]
@@ -195,6 +208,8 @@ namespace algs4net.Tests.Collections
                 Assert.AreEqual(expected[i], item);
                 i++;
             }
+            list1.Trace();
+            list2.Trace();
         }
 
         [TestMethod]
@@ -212,6 +227,8 @@ namespace algs4net.Tests.Collections
             }
             Assert.AreEqual(expected.Length, i);
             Assert.AreEqual(expected.Length, list1.Count);
+            list1.Trace();
+            list2.Trace();
         }
 
         [TestMethod]
@@ -227,6 +244,7 @@ namespace algs4net.Tests.Collections
             {
                 Assert.AreEqual(2, item);
             }
+            list.Trace();
         }
 
         [TestMethod]
@@ -241,6 +259,7 @@ namespace algs4net.Tests.Collections
                 Assert.AreEqual(i, item);
                 i += 2;
             }
+            list.Trace();
         }
 
         [TestMethod]
@@ -256,6 +275,7 @@ namespace algs4net.Tests.Collections
             {
                 Assert.AreEqual(2, item);
             }
+            list.Trace();
         }
 
         [TestMethod]
@@ -270,6 +290,7 @@ namespace algs4net.Tests.Collections
                 Assert.AreEqual(i, item);
                 i += 2;
             }
+            list.Trace();
         }
     }
 }

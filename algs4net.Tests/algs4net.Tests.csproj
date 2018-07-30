@@ -6,6 +6,10 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;NETCOREAPP;NETCOREAPP2_1;NETCOREAPP;NETCOREAPP2_1</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Appveyor.TestLogger" Version="2.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />

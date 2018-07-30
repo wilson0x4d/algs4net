@@ -1,5 +1,6 @@
 ﻿using algs4net.Collections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
 using System.Linq;
 
 namespace algs4net.Tests.Collections
@@ -21,6 +22,7 @@ namespace algs4net.Tests.Collections
                 var actualValue = fifo.Dequeue();
                 Assert.AreEqual(expectedValue, actualValue);
             }
+            fifo.Trace();
         }
 
         [TestMethod]
@@ -38,6 +40,7 @@ namespace algs4net.Tests.Collections
                 Assert.AreEqual(expectedValues[i], actualValue);
                 i++;
             }
+            fifo.Trace();
         }
     }
 }

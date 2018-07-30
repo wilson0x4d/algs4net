@@ -1,5 +1,6 @@
 ﻿using algs4net.Collections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
 
 namespace algs4net.Tests.Collections
 {
@@ -15,6 +16,7 @@ namespace algs4net.Tests.Collections
                 bag.Add(v);
             }
             Assert.AreEqual(10, bag.Count);
+            bag.Trace();
         }
 
         [TestMethod]
@@ -34,6 +36,7 @@ namespace algs4net.Tests.Collections
                 Assert.AreEqual(expectedValue, actualValue);
             }
             Assert.AreEqual(0, expectedValues.Count);
+            bag.Trace();
         }
     }
 }

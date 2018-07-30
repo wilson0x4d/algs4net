@@ -1,5 +1,6 @@
 ﻿using algs4net.Collections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
 using System.Linq;
 
 namespace algs4net.Tests.Collections
@@ -22,6 +23,7 @@ namespace algs4net.Tests.Collections
                 var actualValue = deque.PopLeft();
                 Assert.AreEqual(expectedValue, actualValue);
             }
+            deque.Trace();
         }
 
         [TestMethod]
@@ -39,6 +41,7 @@ namespace algs4net.Tests.Collections
                 var actualValue = deque.PopRight();
                 Assert.AreEqual(expectedValue, actualValue);
             }
+            deque.Trace();
         }
 
         [TestMethod]
@@ -57,6 +60,7 @@ namespace algs4net.Tests.Collections
             {
                 Assert.AreEqual(expectedValues[--i], actualValue);
             }
+            deque.Trace();
         }
 
         [TestMethod]
@@ -75,6 +79,7 @@ namespace algs4net.Tests.Collections
                 Assert.AreEqual(expectedValues[i], actualValue);
                 i++;
             }
+            deque.Trace();
         }
     }
 }

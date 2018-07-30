@@ -1,6 +1,7 @@
 ﻿using algs4net.Collections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace algs4net.Tests.Collections
@@ -19,6 +20,7 @@ namespace algs4net.Tests.Collections
                 pq.Enqueue(v);
             }
             Assert.AreEqual(2 * count, pq.Count);
+            pq.Trace();
         }
 
         [TestMethod]
@@ -32,6 +34,7 @@ namespace algs4net.Tests.Collections
                 var actualValue = pq.Dequeue();
                 Assert.AreEqual(expectedValue, actualValue);
             }
+            pq.Trace();
         }
 
         [TestMethod]
@@ -45,6 +48,7 @@ namespace algs4net.Tests.Collections
                 var actualValue = pq.Dequeue();
                 Assert.AreEqual(expectedValue, actualValue);
             }
+            pq.Trace();
         }
 
         [TestMethod]
@@ -52,6 +56,7 @@ namespace algs4net.Tests.Collections
         public void HeapPQ_ctor_ThrowOnZeroOrNegativeCapacity()
         {
             var pq = new HeapPQ<int>(0);
+            pq.Trace();
         }
 
         [TestMethod]
@@ -70,6 +75,7 @@ namespace algs4net.Tests.Collections
                 var actualValue = pq.Dequeue();
                 Assert.AreEqual(expectedValue, actualValue);
             }
+            pq.Trace();
         }
 
         [TestMethod]
@@ -88,6 +94,7 @@ namespace algs4net.Tests.Collections
                 var actualValue = pq.Dequeue();
                 Assert.AreEqual(expectedValue, actualValue);
             }
+            pq.Trace();
         }
 
         [TestMethod]
@@ -100,6 +107,7 @@ namespace algs4net.Tests.Collections
                 pq.Enqueue(v);
             }
             Assert.AreEqual(expectedValues.Length, pq.Count);
+            pq.Trace();
         }
 
         [TestMethod]
@@ -112,6 +120,7 @@ namespace algs4net.Tests.Collections
                 pq.Enqueue(v);
             }
             Assert.AreEqual(expectedValues.Length, pq.Count);
+            pq.Trace();
         }
 
         [TestMethod]
@@ -131,6 +140,7 @@ namespace algs4net.Tests.Collections
             {
                 Assert.AreEqual(expectedValues[i], pq[i]);
             }
+            pq.Trace();
         }
     }
 }
