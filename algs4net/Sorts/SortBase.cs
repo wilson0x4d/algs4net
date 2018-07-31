@@ -9,9 +9,9 @@ namespace algs4net.Sorts
         protected readonly IComparer<T> _comparer;
 
 #if DEBUG
-        protected long _comparisonCount = 0;
+        protected ulong _comparisonCount = 0;
 
-        protected long _exchangeCount = 0;
+        protected ulong _exchangeCount = 0;
 
         protected int _inputLength = 0;
 #endif

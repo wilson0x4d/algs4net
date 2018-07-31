@@ -25,9 +25,6 @@ namespace algs4net.Sorts
 
         public T[] Sort(T[] input, int lo, int hi)
         {
-#if DEBUG
-            _inputLength = input.Length;
-#endif
             for (int i = lo; i <= hi; i++)
             {
                 var k = i;
@@ -40,6 +37,9 @@ namespace algs4net.Sorts
                 }
                 Exchange(input, i, k);
             }
+#if DEBUG
+            _inputLength = input.Length;
+#endif
             return input;
         }
     }

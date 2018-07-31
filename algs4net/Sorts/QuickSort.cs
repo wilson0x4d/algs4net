@@ -12,6 +12,12 @@ namespace algs4net.Sorts
 
         protected readonly ISupportsSubsetSort<T> _subsetSort;
 
+#if DEBUG
+        protected ulong _cycles = 0L;
+
+        protected ulong _partitions = 0L;
+#endif
+
         private QuickSortAlgorithm _sortAlgorithm;
 
         public QuickSort()
@@ -48,15 +54,16 @@ namespace algs4net.Sorts
 
         public override T[] Sort(T[] input)
         {
-#if DEBUG
-            _inputLength = input.Length;
-#endif
             input = RandomizeInput(input);
             return Sort(input, 0, input.Length - 1);
         }
 
         public virtual T[] Sort(T[] input, int lo, int hi)
         {
+#if DEBUG
+            _cycles++;
+            _inputLength = input.Length;
+#endif
             if (hi <= lo + _maximumSubsetSortSize)
             {
                 return (_subsetSort != null)
@@ -72,8 +79,18 @@ namespace algs4net.Sorts
             return input;
         }
 
+#if DEBUG
+        public override string ToString()
+        {
+            return $"type:{_sortAlgorithm.Method.Name}, {base.ToString()}, cycles:{_cycles}, parts:{_partitions}";
+        }
+#endif
+
         protected virtual int Partition(T[] input, int lo, int hi)
         {
+#if DEBUG
+            _partitions++;
+#endif
             var i = lo;
             var j = hi;
             var v = input[i];

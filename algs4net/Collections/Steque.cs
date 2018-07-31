@@ -8,6 +8,12 @@ namespace algs4net.Collections
         IStack<T>
         where T : IComparable<T>
     {
+#if DEBUG
+        protected ulong _pops = 0L;
+
+        protected ulong _pushes = 0L;
+#endif
+
         public Steque() :
             base(QueueType.FIFO)
         {
@@ -15,6 +21,9 @@ namespace algs4net.Collections
 
         public virtual T Pop()
         {
+#if DEBUG
+            _pops++;
+#endif
             if (_head == null)
             {
                 throw new RankException("Collection contained no elements.");
@@ -34,7 +43,17 @@ namespace algs4net.Collections
 
         public virtual void Push(T value)
         {
+#if DEBUG
+            _pushes++;
+#endif
             base.Enqueue(value);
         }
+
+#if DEBUG
+        public override string ToString()
+        {
+            return $"{base.ToString()}, pushes:{_pushes}, pops:{_pops}";
+        }
+#endif
     }
 }

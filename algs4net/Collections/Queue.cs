@@ -9,6 +9,12 @@ namespace algs4net.Collections
     {
         protected readonly QueueType _queueType;
 
+#if DEBUG
+        protected ulong _dequeues = 0L;
+
+        protected ulong _enqueues = 0L;
+#endif
+
         public Queue()
             : this(QueueType.FIFO)
         {
@@ -54,13 +60,26 @@ namespace algs4net.Collections
                 }
             }
             _count--;
+#if DEBUG
+            _enqueues++;
+#endif
             return node.Value;
         }
 
         public virtual void Enqueue(T value)
         {
+#if DEBUG
+            _enqueues++;
+#endif
             base.Add(value);
         }
+
+#if DEBUG
+        public override string ToString()
+        {
+            return $"queue:{_queueType}, {base.ToString()}, enqueues:{_enqueues}, dequeues:{_dequeues}";
+        }
+#endif
 
         public enum QueueType
         {

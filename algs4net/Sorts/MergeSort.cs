@@ -9,7 +9,9 @@ namespace algs4net.Sorts
         where T : IComparable<T>
     {
 #if DEBUG
-        protected long _cycles = 0L;
+        protected ulong _cycles = 0L;
+
+        protected ulong _merges = 0L;
 #endif
 
         public MergeSort(IComparer<T> comparer)
@@ -62,12 +64,15 @@ namespace algs4net.Sorts
 #if DEBUG
         public override string ToString()
         {
-            return $"{base.ToString()}, cycles:{_cycles}";
+            return $"{base.ToString()}, cycles:{_cycles}, merges:{_merges}";
         }
 #endif
 
         private void Merge(T[] input, int lo, int mid, int hi)
         {
+#if DEBUG
+            _merges++;
+#endif
             var clone = new T[input.Length];
             Array.Copy(input, clone, clone.Length); // TODO: using linked lists instead of arrays would allow us to eliminate the clone without dramatically changing any logic -- consider a set of LinkedList-aware Sort() interfaces
             var i = lo;

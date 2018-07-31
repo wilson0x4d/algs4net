@@ -32,7 +32,7 @@ namespace algs4net.Tests.Sorts
         [TestMethod]
         public void HeapSort_Sort_ProducesOrderedSets_WithComparer()
         {
-            var sort = new HeapSort<int>(Comparers<int>.InversionComparer);
+            var sort = new HeapSort<int>(Comparers<int>.DefaultInversionComparer);
             var expected = IntegralNumberGenerator
                 .YieldPredictableSeries(10)
                 .OrderBy(e => e)

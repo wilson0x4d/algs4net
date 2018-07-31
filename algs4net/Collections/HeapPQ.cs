@@ -17,11 +17,33 @@ namespace algs4net.Collections
         IEnumerable<T>
         where T : IComparable<T>
     {
-        private IComparer<T> _comparer;
+        private readonly IComparer<T> _comparer;
 
         private int _count = 0;
 
+#if DEBUG
+
+        private ulong _exchanges = 0L;
+
+#endif
+
         private T[] _heap; // TODO: looks like it may be possible to perform N-ary heap distributions during `Sink()`
+
+#if DEBUG
+
+        private ulong _inserts = 0L;
+
+        private ulong _removals = 0L;
+
+        private ulong _resizesdown = 0L;
+
+        private ulong _resizesup = 0L;
+
+        private ulong _sinks = 0L;
+
+        private ulong _swims = 0L;
+
+#endif
 
         public override int Count => _count;
 
@@ -91,6 +113,9 @@ namespace algs4net.Collections
                     throw new IndexOutOfRangeException();
                 }
                 _heap[index] = value;
+#if DEBUG
+                _inserts++;
+#endif
             }
         }
 
@@ -99,11 +124,17 @@ namespace algs4net.Collections
             var item = _heap[1];
             _heap[1] = _heap[_count];
             _heap[_count] = default(T);
+#if DEBUG
+            _removals++;
+#endif
             _count--;
             var mid = _heap.Length >> 1;
-            if (_count < mid)
+            if (_count < mid && mid >= 0x4d)
             {
                 Array.Resize(ref _heap, mid);
+#if DEBUG
+                _resizesdown++;
+#endif
             }
             Sink(1);
             return item;
@@ -115,9 +146,15 @@ namespace algs4net.Collections
             if (_count >= _heap.Length)
             {
                 Array.Resize(ref _heap, (_heap.Length << 2));
+#if DEBUG
+                _resizesup++;
+#endif
             }
             var index = _count;
             _heap[index] = item;
+#if DEBUG
+            _inserts++;
+#endif
             Swim(index);
         }
 
@@ -131,8 +168,20 @@ namespace algs4net.Collections
             }
         }
 
+#if DEBUG
+
+        public override string ToString()
+        {
+            return $"{base.ToString()}, capacity:{_heap.Length - 1}, sizeup:{_resizesup}, sizedown:{_resizesdown}, inserts:{_inserts}, removals:{_removals}, sinks:{_sinks}, swims:{_swims}, exchanges:{_sinks}, {_comparer}";
+        }
+
+#endif
+
         private int Sink(int index)
         {
+#if DEBUG
+            _sinks++;
+#endif
             var swapIndex = index * 2;
             while (swapIndex <= _count)
             {
@@ -149,12 +198,18 @@ namespace algs4net.Collections
                 _heap[index] = item;
                 index = swapIndex;
                 swapIndex *= 2;
+#if DEBUG
+                _exchanges++;
+#endif
             }
             return index;
         }
 
         private int Swim(int index)
         {
+#if DEBUG
+            _swims++;
+#endif
             var swapIndex = index / 2;
             while (swapIndex >= 1 && _comparer.Compare(_heap[index], _heap[swapIndex]) > 0)
             {
@@ -163,6 +218,9 @@ namespace algs4net.Collections
                 _heap[swapIndex] = item;
                 index = swapIndex;
                 swapIndex /= 2;
+#if DEBUG
+                _exchanges++;
+#endif
             }
             return index;
         }

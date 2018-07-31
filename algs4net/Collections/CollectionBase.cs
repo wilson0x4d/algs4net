@@ -16,5 +16,10 @@ namespace algs4net.Collections
         {
             return this.GetEnumerator();
         }
+
+        public override string ToString()
+        {
+            return $"count:{Count}";
+        }
     }
 }

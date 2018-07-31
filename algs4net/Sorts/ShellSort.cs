@@ -19,9 +19,6 @@ namespace algs4net.Sorts
 
         public override T[] Sort(T[] input)
         {
-#if DEBUG
-            _inputLength = input.Length;
-#endif
             // derive an outer increment `h`, bounded to 1/3rd of the set
             var maxIncrement = input.Length / 3;
             var h = 1;
@@ -40,6 +37,9 @@ namespace algs4net.Sorts
                 }
                 h /= 3;
             }
+#if DEBUG
+            _inputLength = input.Length;
+#endif
             return input;
         }
 
@@ -51,9 +51,6 @@ namespace algs4net.Sorts
         /// <returns></returns>
         public T[] Sort(T[] input, int[] incrementSeries)
         {
-#if DEBUG
-            _inputLength = input.Length;
-#endif
             // derive an outer increment `h`, bounded to 1/3rd of the set
             var maxIncrement = input.Length / 3;
             foreach (var h in incrementSeries)
@@ -66,6 +63,9 @@ namespace algs4net.Sorts
                     }
                 }
             }
+#if DEBUG
+            _inputLength = input.Length;
+#endif
             return input;
         }
     }

@@ -16,7 +16,15 @@ namespace algs4net.Collections
     {
         protected readonly IComparer<T> _comparer;
 
-        protected readonly LinkedList<T> _items; // TODO: LinkedList variant with `Parent` node, and re-implement LinkedPQ with relevant Sink()/Swim() logic (replacing current elementary implementation)
+        protected readonly LinkedList<T> _items;
+
+#if DEBUG
+        protected ulong _dequeues = 0L;
+
+        protected ulong _enqueues = 0L;
+#endif
+
+        // TODO: LinkedList variant with `Parent` node, and re-implement LinkedPQ with relevant Sink()/Swim() logic (replacing current elementary implementation)
 
         public override int Count => _items.Count;
 
@@ -49,11 +57,29 @@ namespace algs4net.Collections
             {
                 throw new NotSupportedException("Queue was empty during `Dequeue()` call.");
             }
+#if DEBUG
+            _dequeues++;
+#endif
             return value;
         }
 
-        public virtual void Enqueue(T item) => _items.InsertAfter(item, item);
+        public virtual void Enqueue(T item)
+        {
+            _items.InsertAfter(item, item);
+#if DEBUG
+            _enqueues++;
+#endif
+        }
 
         public override IEnumerator<T> GetEnumerator() => _items.GetEnumerator();
+
+#if DEBUG
+
+        public override string ToString()
+        {
+            return $"{base.ToString()}, enqueues:{_enqueues}, dequeues:{_dequeues}, list:{{ {_items} }}";
+        }
+
+#endif
     }
 }

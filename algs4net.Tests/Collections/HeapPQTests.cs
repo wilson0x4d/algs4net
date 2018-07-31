@@ -13,7 +13,7 @@ namespace algs4net.Tests.Collections
         public void HeapPQ_CanHandleLargeSets()
         {
             var count = 10000000;
-            var expectedValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(count);
+            var expectedValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(count).ToArray();
             var pq = new HeapPQ<int>(expectedValues);
             foreach (var v in expectedValues)
             {
@@ -41,7 +41,7 @@ namespace algs4net.Tests.Collections
         public void HeapPQ_ctor_CanConstructPopulated_WithComparer()
         {
             var expectedValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(10000).ToArray();
-            var pq = new HeapPQ<int>(expectedValues, Comparers<int>.InversionComparer);
+            var pq = new HeapPQ<int>(expectedValues, Comparers<int>.DefaultInversionComparer);
             expectedValues = expectedValues.OrderBy(e => e).ToArray();
             foreach (var expectedValue in expectedValues)
             {
@@ -82,7 +82,7 @@ namespace algs4net.Tests.Collections
         public void HeapPQ_Dequeue_YieldsExpectedResults_WithComparer()
         {
             var expectedValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(10000).ToArray();
-            var pq = new HeapPQ<int>(Comparers<int>.InversionComparer);
+            var pq = new HeapPQ<int>(Comparers<int>.DefaultInversionComparer);
             foreach (var v in expectedValues)
             {
                 pq.Enqueue(v);
@@ -114,7 +114,7 @@ namespace algs4net.Tests.Collections
         public void HeapPQ_Enqueue_YieldsExpectedCount_WithComparer()
         {
             var expectedValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(10000).ToArray();
-            var pq = new HeapPQ<int>(Comparers<int>.InversionComparer);
+            var pq = new HeapPQ<int>(Comparers<int>.DefaultInversionComparer);
             foreach (var v in expectedValues)
             {
                 pq.Enqueue(v);

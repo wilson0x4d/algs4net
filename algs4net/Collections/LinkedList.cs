@@ -10,14 +10,30 @@ namespace algs4net.Collections
         where T : IComparable<T>
     {
         // NOTE: this comparer exists only for elementary order-aware
-        //       operations such as `insertbefore` and `insertafter`,
-        //       defaults to `Comparers<T>.DefaultComparer` during
-        //       construction if not specified
+        // operations such as `insertbefore` and `insertafter`, defaults to
+        // `Comparers<T>.DefaultComparer` during construction if not specified
         protected readonly IComparer<T> _comparer;
 
         protected int _count = 0;
+
         protected Node _head;
-        protected int _version = 0; // NOTE: only used as a "dirty flag" during enumeration -- not synchronized, if used for any other purpose most likely would require synchronization
+
+#if DEBUG
+
+        protected ulong _headswaps = 0L;
+
+        protected ulong _inserts = 0L;
+
+        protected ulong _removals = 0L;
+
+#endif
+
+        /// <summary>
+        /// a "dirty flag" meant for use during enumeration to detect
+        /// collection changes
+        /// </summary>
+        protected ulong _version = 0;
+
         public override int Count => _count;
 
         public LinkedList()
@@ -46,6 +62,9 @@ namespace algs4net.Collections
                 _head = new Node { Value = item };
                 _head.Previous = _head;
                 _head.Next = _head;
+#if DEBUG
+                _headswaps++;
+#endif
             }
             else
             {
@@ -53,6 +72,9 @@ namespace algs4net.Collections
                 node.Previous.Next = node;
                 node.Next.Previous = node;
             }
+#if DEBUG
+            _inserts++;
+#endif
             _count++;
             _version++;
         }
@@ -63,7 +85,6 @@ namespace algs4net.Collections
             {
                 Add(item);
             }
-            _version++;
         }
 
         public override IEnumerator<T> GetEnumerator()
@@ -109,9 +130,15 @@ namespace algs4net.Collections
                     node = new Node { Value = value, Next = current, Previous = current.Previous };
                     current.Previous.Next = node;
                     current.Previous = node;
+#if DEBUG
+                    _inserts++;
+#endif
                     if (current == _head)
                     {
                         _head = node;
+#if DEBUG
+                        _headswaps++;
+#endif
                     }
                     break;
                 }
@@ -123,6 +150,9 @@ namespace algs4net.Collections
                 node = new Node { Value = value, Next = _head, Previous = _head.Previous };
                 _head.Previous.Next = node;
                 _head.Previous = node;
+#if DEBUG
+                _inserts++;
+#endif
             }
             _count++;
         }
@@ -155,9 +185,15 @@ namespace algs4net.Collections
             var node = new Node { Value = value, Previous = current.Previous, Next = current };
             node.Previous.Next = node;
             node.Next.Previous = node;
+#if DEBUG
+            _inserts++;
+#endif
             if (current == _head)
             {
                 _head = node;
+#if DEBUG
+                _headswaps++;
+#endif
             }
             _count++;
         }
@@ -186,9 +222,15 @@ namespace algs4net.Collections
                     node = new Node { Value = value, Next = current, Previous = current.Previous };
                     current.Previous.Next = node;
                     current.Previous = node;
+#if DEBUG
+                    _inserts++;
+#endif
                     if (current == _head)
                     {
                         _head = node;
+#if DEBUG
+                        _headswaps++;
+#endif
                     }
                     break;
                 }
@@ -200,6 +242,9 @@ namespace algs4net.Collections
                 node = new Node { Value = value, Next = _head, Previous = _head.Previous };
                 _head.Previous.Next = node;
                 _head.Previous = node;
+#if DEBUG
+                _inserts++;
+#endif
             }
             _count++;
         }
@@ -221,6 +266,10 @@ namespace algs4net.Collections
                 this._count = source._count;
                 source._count = 0;
                 source._head = null;
+#if DEBUG
+                source._removals++;
+                source._headswaps++;
+#endif
             }
             else
             {
@@ -231,21 +280,31 @@ namespace algs4net.Collections
                 {
                     if (left.Value.CompareTo(right.Value) <= 0)
                     {
+                        // iterate next lnode or break when list exhausted
                         left = (left.Next == _head)
                             ? null
                             : left.Next;
                     }
                     else
                     {
+                        // stitch rnode in at lnode's current position
                         var rightNext = right.Next;
                         right.Next = left;
                         right.Previous = left.Previous;
                         left.Previous.Next = right;
                         left.Previous = right;
+#if DEBUG
+                        source._removals++;
+                        _inserts++;
+#endif
                         if (_head == right.Next)
                         {
                             _head = right;
+#if DEBUG
+                            _headswaps++;
+#endif
                         }
+                        // iterate next rnode or break when list exhausted
                         if (source._head == rightNext)
                         {
                             right = null;
@@ -262,6 +321,10 @@ namespace algs4net.Collections
                     right.Previous = _head.Previous;
                     _head.Previous = sourceTail;
                     sourceTail.Next = _head;
+#if DEBUG
+                    source._removals++;
+                    _inserts++;
+#endif
                 }
                 _count += source._count;
                 source._count = 0;
@@ -289,10 +352,16 @@ namespace algs4net.Collections
                         if (_count == 0)
                         {
                             _head = null;
+#if DEBUG
+                            _headswaps++;
+#endif
                         }
                         else if (current == _head)
                         {
                             _head = current.Next;
+#if DEBUG
+                            _headswaps++;
+#endif
                         }
                         _version++;
                         return true;
@@ -306,7 +375,7 @@ namespace algs4net.Collections
         public virtual bool RemoveAt(int index)
         {
             // NOTE: a simplified signature for removals when the value is
-            //       not required by caller
+            // not required by caller
             return RemoveAt(index, out T value);
         }
 
@@ -334,14 +403,23 @@ namespace algs4net.Collections
                 {
                     current.Next.Previous = current.Previous;
                     current.Previous.Next = current.Next;
+#if DEBUG
+                    _removals++;
+#endif
                     _count--;
                     if (_count == 0)
                     {
                         _head = null;
+#if DEBUG
+                        _headswaps++;
+#endif
                     }
                     else if (current == _head)
                     {
                         _head = current.Next;
+#if DEBUG
+                        _headswaps++;
+#endif
                     }
                     _version++;
                     value = current.Value;
@@ -363,16 +441,31 @@ namespace algs4net.Collections
             return false;
         }
 
-        protected sealed class Node
+#if DEBUG
+
+        public override string ToString()
+        {
+            return $"{base.ToString()}, inserts:{_inserts}, removals:{_removals}, headswaps:{_headswaps}, {_comparer}";
+        }
+
+#endif
+
+        protected class Node
         {
             public Node Next;
+
             public Node Previous;
+
             public T Value;
+
+#if DEBUG
 
             public override string ToString()
             {
                 return $"{Value}";
             }
+
+#endif
         }
     }
 }

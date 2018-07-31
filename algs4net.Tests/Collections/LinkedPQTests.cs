@@ -27,7 +27,7 @@ namespace algs4net.Tests.Collections
         public void LinkedPQ_ctor_CanConstructPopulated_WithComparer()
         {
             var expectedValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(1000).ToArray();
-            var pq = new LinkedPQ<int>(expectedValues, Comparers<int>.InversionComparer);
+            var pq = new LinkedPQ<int>(expectedValues, Comparers<int>.DefaultInversionComparer);
             expectedValues = expectedValues.OrderBy(e => e).Reverse().ToArray();
             foreach (var expectedValue in expectedValues)
             {
@@ -55,7 +55,7 @@ namespace algs4net.Tests.Collections
         public void LinkedPQ_Dequeue_YieldsExpectedResults_WithComparer()
         {
             var expectedValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(1000).ToArray();
-            var pq = new LinkedPQ<int>(null, Comparers<int>.InversionComparer);
+            var pq = new LinkedPQ<int>(null, Comparers<int>.DefaultInversionComparer);
             foreach (var v in expectedValues)
             {
                 pq.Enqueue(v);
@@ -92,7 +92,7 @@ namespace algs4net.Tests.Collections
         public void LinkedPQ_Enqueue_YieldsExpectedResults_WithComparer()
         {
             var expectedValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(1000).ToArray();
-            var pq = new LinkedPQ<int>(null, Comparers<int>.InversionComparer);
+            var pq = new LinkedPQ<int>(null, Comparers<int>.DefaultInversionComparer);
             foreach (var v in expectedValues)
             {
                 pq.Enqueue(v);
