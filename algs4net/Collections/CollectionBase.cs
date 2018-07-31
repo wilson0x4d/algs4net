@@ -14,7 +14,7 @@ namespace algs4net.Collections
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
 
         public override string ToString()

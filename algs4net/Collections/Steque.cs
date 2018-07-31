@@ -26,7 +26,7 @@ namespace algs4net.Collections
 #endif
             if (_head == null)
             {
-                throw new RankException("Collection contained no elements.");
+                throw new InvalidOperationException("Collection contained no elements.");
             }
 
             var node = _head.Previous;

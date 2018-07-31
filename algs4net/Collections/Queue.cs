@@ -29,7 +29,7 @@ namespace algs4net.Collections
         {
             if (_head == null)
             {
-                throw new RankException("Collection contained no elements.");
+                throw new InvalidOperationException("Collection contained no elements.");
             }
             Node node;
             if (_queueType == QueueType.LIFO)
@@ -61,7 +61,7 @@ namespace algs4net.Collections
             }
             _count--;
 #if DEBUG
-            _enqueues++;
+            _dequeues++;
 #endif
             return node.Value;
         }

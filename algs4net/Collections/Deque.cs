@@ -15,7 +15,7 @@ namespace algs4net.Collections
             var item = _head;
             if (item == null)
             {
-                throw new RankException("Collection has no elements.");
+                throw new InvalidOperationException("Collection has no elements.");
             }
 
             item.Previous.Next = item.Next;
@@ -32,7 +32,7 @@ namespace algs4net.Collections
             var item = _head?.Previous ?? _head;
             if (item == null)
             {
-                throw new RankException("Collection has no elements.");
+                throw new InvalidOperationException("Collection has no elements.");
             }
 
             item.Previous.Next = item.Next;

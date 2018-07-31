@@ -45,10 +45,12 @@ namespace algs4net.Collections
         }
 
 #if DEBUG
+
         public override string ToString()
         {
             return $"{base.ToString()}, pushes:{_pushes}, pops:{_pops}";
         }
+
 #endif
     }
 }
