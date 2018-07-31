@@ -3,7 +3,7 @@ using System;
 namespace algs4net.Collections
 {
     public class Stack<T> :
-        Queue<T>,
+        LinkedList<T>,
         IStack<T>
         where T : IComparable<T>
     {
@@ -13,25 +13,35 @@ namespace algs4net.Collections
         protected ulong _pushes = 0L;
 #endif
 
-        public Stack()
-            : base(QueueType.LIFO)
-        {
-        }
-
         public virtual T Pop()
         {
+            if (_head == null)
+            {
+                throw new InvalidOperationException("Collection contained no elements.");
+            }
+            Node node = _head.Previous;
+            if (node == _head)
+            {
+                _head = null;
+            }
+            else
+            {
+                node.Previous.Next = node.Next;
+                node.Next.Previous = node.Previous;
+            }
+            _count--;
 #if DEBUG
             _pops++;
 #endif
-            return base.Dequeue();
+            return node.Value;
         }
 
-        public virtual void Push(T item)
+        public virtual void Push(T value)
         {
 #if DEBUG
             _pushes++;
 #endif
-            base.Enqueue(item);
+            base.Add(value);
         }
 
 #if DEBUG
