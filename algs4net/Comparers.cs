@@ -13,9 +13,13 @@ namespace algs4net
     public static class Comparers<T>
         where T : IComparable<T>
     {
-        private static BasicComparer _defaultComparer;
+        private static IComparer<T> _defaultComparer;
 
-        private static BasicInversionComparer _defaultInversionComparer;
+        private static IEqualityComparer<T> _defaultEqualityComparer;
+
+        private static IComparer<T> _defaultInversionComparer;
+
+        private static IEqualityComparer<T> _defaultInversionEqualityComparer;
 
         /// <summary>
         /// Gets the default <see cref="IComparer{T}"/> used by various data
@@ -23,6 +27,9 @@ namespace algs4net
         /// </summary>
         public static IComparer<T> DefaultComparer =>
             _defaultComparer ?? new BasicComparer();
+
+        public static IEqualityComparer<T> DefaultEqualityComparer =>
+            _defaultEqualityComparer ?? new BasicComparer();
 
         /// <summary>
         /// Gets the default "inverted" <see cref="IComparer{T}"/> used by
@@ -32,20 +39,31 @@ namespace algs4net
         public static IComparer<T> DefaultInversionComparer =>
             _defaultInversionComparer ?? new BasicInversionComparer();
 
+        public static IEqualityComparer<T> DefaultInversionEqualityComparer =>
+            _defaultInversionEqualityComparer ?? new BasicInversionComparer();
+
         static Comparers()
         {
 #if !DEBUG
-            _defaultComparer = new ComparableComparer();
-            _defaultInversionComparer = new ComparableInversionComparer();
+            var defaultComparer = new ComparableComparer();
+            _defaultComparer = defaultComparer;
+            _defaultEqualityComparer = defaultComparer;
+            var defaultInversionComparer = new ComparableInvestionComparer();
+            _defaultInversionComparer = defaultInversionComparer;
+            _defaultInversionEqualityComparer = defaultInversionComparer;
 #else
             // if DEBUG we do not re-use comparers, allows capture
             // per-instance counts in-test
             _defaultComparer = null;
+            _defaultEqualityComparer = null;
             _defaultInversionComparer = null;
+            _defaultInversionEqualityComparer = null;
 #endif
         }
 
-        public sealed class BasicComparer : IComparer<T>
+        public sealed class BasicComparer :
+            IComparer<T>,
+            IEqualityComparer<T>
         {
 #if DEBUG
             private ulong _compares = 0L;
@@ -59,6 +77,21 @@ namespace algs4net
                 return (x as IComparable<T>).CompareTo(y);
             }
 
+            public bool Equals(T x, T y)
+            {
+#if DEBUG
+                _compares++;
+#endif
+                return (x is IEquatable<T> equatable)
+                    ? equatable.Equals(y)
+                    : x.Equals(y);
+            }
+
+            public int GetHashCode(T obj)
+            {
+                return obj.GetHashCode();
+            }
+
 #if DEBUG
 
             public override string ToString()
@@ -69,7 +102,9 @@ namespace algs4net
 #endif
         }
 
-        public sealed class BasicInversionComparer : IComparer<T>
+        public sealed class BasicInversionComparer :
+            IComparer<T>,
+            IEqualityComparer<T>
         {
 #if DEBUG
             private ulong _compares = 0L;
@@ -81,6 +116,21 @@ namespace algs4net
                 _compares++;
 #endif
                 return -1 * (x as IComparable<T>).CompareTo(y);
+            }
+
+            public bool Equals(T x, T y)
+            {
+#if DEBUG
+                _compares++;
+#endif
+                return (x is IEquatable<T> equatable)
+                    ? equatable.Equals(y)
+                    : x.Equals(y);
+            }
+
+            public int GetHashCode(T obj)
+            {
+                return obj.GetHashCode();
             }
 
 #if DEBUG
