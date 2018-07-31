@@ -12,7 +12,7 @@ namespace algs4net.Tests.Sorts
         [TestMethod]
         public void InsertionSort_Sort_CanSortSubset()
         {
-            var mid = 5000;
+            var mid = SortTestHelpers.BASELINE_SORT_SIZE / 2;
             var sort = new InsertionSort<int>();
             var set = IntegralNumberGenerator
                 .YieldPredictableSeries(mid)
@@ -39,7 +39,7 @@ namespace algs4net.Tests.Sorts
         {
             var sort = new InsertionSort<int>();
             var set = IntegralNumberGenerator
-                .YieldPredictableSeries(10000)
+                .YieldPredictableSeries(SortTestHelpers.BASELINE_SORT_SIZE)
                 .ToArray();
             set = sort.Sort(set);
 

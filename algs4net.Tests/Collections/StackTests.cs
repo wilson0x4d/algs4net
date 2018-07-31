@@ -1,6 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using algs4net.Collections;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
@@ -36,7 +36,7 @@ namespace algs4net.Tests.Collections
                 lifo.Push(v);
             }
             var i = 0;
-            foreach (var actualValue in lifo.Reverse())
+            foreach (var actualValue in lifo)
             {
                 Assert.AreEqual(expectedValues[i], actualValue);
                 i++;

@@ -16,7 +16,7 @@ namespace algs4net.Tests.Sorts
                 (int)IntegralNumberGenerator.YieldFibonacciSeries(9).Last(),
                 new InsertionSort<int>());
             var set = IntegralNumberGenerator
-                .YieldPredictableSeries(10000)
+                .YieldPredictableSeries(SortTestHelpers.BASELINE_SORT_SIZE)
                 .ToArray();
             set = sort.Sort(set);
             set.AssertIsOrdered();
@@ -26,7 +26,7 @@ namespace algs4net.Tests.Sorts
         [TestMethod]
         public void QuickSort_Sort_CanSortSubset()
         {
-            var mid = 5000;
+            var mid = SortTestHelpers.BASELINE_SORT_SIZE / 2;
             var sort = new QuickSort<int>();
             var set = IntegralNumberGenerator
                 .YieldPredictableSeries(mid)
@@ -53,7 +53,7 @@ namespace algs4net.Tests.Sorts
         {
             var sort = new QuickSort<int>();
             var set = IntegralNumberGenerator
-                .YieldPredictableSeries(10000)
+                .YieldPredictableSeries(SortTestHelpers.BASELINE_SORT_SIZE)
                 .ToArray();
             set = sort.Sort(set);
             set.AssertIsOrdered();

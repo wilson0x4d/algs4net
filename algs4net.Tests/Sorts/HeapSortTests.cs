@@ -15,11 +15,11 @@ namespace algs4net.Tests.Sorts
         {
             var sort = new HeapSort<int>();
             var expected = IntegralNumberGenerator
-                .YieldPredictableSeries(10)
+                .YieldPredictableSeries(SortTestHelpers.BASELINE_SORT_SIZE)
                 .OrderBy(e => e)
                 .ToArray();
             var set = IntegralNumberGenerator
-                .YieldPredictableSeries(10)
+                .YieldPredictableSeries(SortTestHelpers.BASELINE_SORT_SIZE)
                 .ToArray();
             set = sort.Sort(set);
             for (int i = 0; i < expected.Length; i++)
@@ -34,12 +34,12 @@ namespace algs4net.Tests.Sorts
         {
             var sort = new HeapSort<int>(Comparers<int>.DefaultInversionComparer);
             var expected = IntegralNumberGenerator
-                .YieldPredictableSeries(10)
+                .YieldPredictableSeries(SortTestHelpers.BASELINE_SORT_SIZE)
                 .OrderBy(e => e)
                 .Reverse()
                 .ToArray();
             var set = IntegralNumberGenerator
-                .YieldPredictableSeries(10)
+                .YieldPredictableSeries(SortTestHelpers.BASELINE_SORT_SIZE)
                 .ToArray();
             set = sort.Sort(set);
             for (int i = 0; i < expected.Length; i++)

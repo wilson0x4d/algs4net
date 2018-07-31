@@ -15,7 +15,7 @@ namespace algs4net.Tests.Sorts
         {
             var sort = new ShellSort<int>();
             var set = IntegralNumberGenerator
-                .YieldPredictableSeries(10000)
+                .YieldPredictableSeries(SortTestHelpers.BASELINE_SORT_SIZE)
                 .ToArray();
             set = sort.Sort(set);
             set.AssertIsOrdered();

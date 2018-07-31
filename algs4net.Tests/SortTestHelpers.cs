@@ -5,6 +5,8 @@ namespace algs4net.Tests
 {
     public static class SortTestHelpers
     {
+        public const int BASELINE_SORT_SIZE = 25000;
+
         public static void AssertIsOrdered<T>(this T[] input)
             where T : IComparable<T>
         {
