@@ -11,7 +11,7 @@ namespace algs4net.Collections
     /// </para>
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class HeapPQ<T> :
+    public class HeapPriorityQueue<T> :
         CollectionBase<T>,
         IQueue<T>,
         IEnumerable<T>
@@ -47,7 +47,7 @@ namespace algs4net.Collections
 
         public override int Count => _count;
 
-        public HeapPQ(int capacity, IComparer<T> comparer)
+        public HeapPriorityQueue(int capacity, IComparer<T> comparer)
         {
             if (capacity <= 0)
             {
@@ -58,7 +58,7 @@ namespace algs4net.Collections
             _comparer = comparer ?? Comparers<T>.DefaultComparer;
         }
 
-        public HeapPQ(IEnumerable<T> items, IComparer<T> comparer)
+        public HeapPriorityQueue(IEnumerable<T> items, IComparer<T> comparer)
             : this(comparer)
         {
             foreach (var item in items)
@@ -67,56 +67,24 @@ namespace algs4net.Collections
             }
         }
 
-        public HeapPQ(IEnumerable<T> items)
+        public HeapPriorityQueue(IEnumerable<T> items)
             : this(items, default(IComparer<T>))
         {
         }
 
-        public HeapPQ(int capacity)
+        public HeapPriorityQueue(int capacity)
             : this(capacity, default(IComparer<T>))
         {
         }
 
-        public HeapPQ(IComparer<T> comparer)
+        public HeapPriorityQueue(IComparer<T> comparer)
             : this(0x4d, comparer)
         {
         }
 
-        public HeapPQ()
+        public HeapPriorityQueue()
             : this(default(IComparer<T>))
         {
-        }
-
-        /// <summary>
-        /// Provide indexed access into the data structure, useful for some
-        /// operations. Not to be confused with an "Indexed Heap".
-        /// <para>Accepts a 0-based index as is typical for indexers.</para>
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public virtual T this[int index]
-        {
-            get
-            {
-                index++;
-                if (index > _count)
-                {
-                    throw new IndexOutOfRangeException();
-                }
-                return _heap[index];
-            }
-            set
-            {
-                index++;
-                if (index > _count)
-                {
-                    throw new IndexOutOfRangeException();
-                }
-                _heap[index] = value;
-#if DEBUG
-                _inserts++;
-#endif
-            }
         }
 
         public T Dequeue()

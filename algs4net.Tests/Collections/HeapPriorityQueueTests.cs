@@ -7,14 +7,14 @@ using System.Linq;
 namespace algs4net.Tests.Collections
 {
     [TestClass]
-    public class HeapPQTests
+    public class HeapPriorityQueueTests
     {
         [TestMethod]
-        public void HeapPQ_CanHandleLargeSets()
+        public void HeapPriorityQueue_CanHandleLargeSets()
         {
             var count = 10000000;
             var expectedValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(count).ToArray();
-            var pq = new HeapPQ<int>(expectedValues);
+            var pq = new HeapPriorityQueue<int>(expectedValues);
             foreach (var v in expectedValues)
             {
                 pq.Enqueue(v);
@@ -24,10 +24,10 @@ namespace algs4net.Tests.Collections
         }
 
         [TestMethod]
-        public void HeapPQ_ctor_CanConstructPopulated()
+        public void HeapPriorityQueue_ctor_CanConstructPopulated()
         {
             var expectedValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(10000).ToArray();
-            var pq = new HeapPQ<int>(expectedValues);
+            var pq = new HeapPriorityQueue<int>(expectedValues);
             expectedValues = expectedValues.OrderBy(e => e).Reverse().ToArray();
             foreach (var expectedValue in expectedValues)
             {
@@ -38,10 +38,10 @@ namespace algs4net.Tests.Collections
         }
 
         [TestMethod]
-        public void HeapPQ_ctor_CanConstructPopulated_WithComparer()
+        public void HeapPriorityQueue_ctor_CanConstructPopulated_WithComparer()
         {
             var expectedValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(10000).ToArray();
-            var pq = new HeapPQ<int>(expectedValues, Comparers<int>.DefaultInversionComparer);
+            var pq = new HeapPriorityQueue<int>(expectedValues, Comparers<int>.DefaultInversionComparer);
             expectedValues = expectedValues.OrderBy(e => e).ToArray();
             foreach (var expectedValue in expectedValues)
             {
@@ -53,17 +53,17 @@ namespace algs4net.Tests.Collections
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void HeapPQ_ctor_ThrowOnZeroOrNegativeCapacity()
+        public void HeapPriorityQueue_ctor_ThrowOnZeroOrNegativeCapacity()
         {
-            var pq = new HeapPQ<int>(0);
+            var pq = new HeapPriorityQueue<int>(0);
             pq.Trace();
         }
 
         [TestMethod]
-        public void HeapPQ_Dequeue_YieldsExpectedResults()
+        public void HeapPriorityQueue_Dequeue_YieldsExpectedResults()
         {
             var expectedValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(10000).ToArray();
-            var pq = new HeapPQ<int>();
+            var pq = new HeapPriorityQueue<int>();
             foreach (var v in expectedValues)
             {
                 pq.Enqueue(v);
@@ -79,10 +79,10 @@ namespace algs4net.Tests.Collections
         }
 
         [TestMethod]
-        public void HeapPQ_Dequeue_YieldsExpectedResults_WithComparer()
+        public void HeapPriorityQueue_Dequeue_YieldsExpectedResults_WithComparer()
         {
             var expectedValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(10000).ToArray();
-            var pq = new HeapPQ<int>(Comparers<int>.DefaultInversionComparer);
+            var pq = new HeapPriorityQueue<int>(Comparers<int>.DefaultInversionComparer);
             foreach (var v in expectedValues)
             {
                 pq.Enqueue(v);
@@ -98,10 +98,10 @@ namespace algs4net.Tests.Collections
         }
 
         [TestMethod]
-        public void HeapPQ_Enqueue_YieldsExpectedCount()
+        public void HeapPriorityQueue_Enqueue_YieldsExpectedCount()
         {
             var expectedValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(10000).ToArray();
-            var pq = new HeapPQ<int>();
+            var pq = new HeapPriorityQueue<int>();
             foreach (var v in expectedValues)
             {
                 pq.Enqueue(v);
@@ -111,35 +111,15 @@ namespace algs4net.Tests.Collections
         }
 
         [TestMethod]
-        public void HeapPQ_Enqueue_YieldsExpectedCount_WithComparer()
+        public void HeapPriorityQueue_Enqueue_YieldsExpectedCount_WithComparer()
         {
             var expectedValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(10000).ToArray();
-            var pq = new HeapPQ<int>(Comparers<int>.DefaultInversionComparer);
+            var pq = new HeapPriorityQueue<int>(Comparers<int>.DefaultInversionComparer);
             foreach (var v in expectedValues)
             {
                 pq.Enqueue(v);
             }
             Assert.AreEqual(expectedValues.Length, pq.Count);
-            pq.Trace();
-        }
-
-        [TestMethod]
-        public void HeapPQ_indexer_CanAccessHeap()
-        {
-            var originValues = Generators.IntegralNumberGenerator.YieldPredictableSeries(1000).ToArray();
-            var expectedValues = originValues.OrderBy(e => e).ToArray();
-            SortTestHelpers.AssertIsUnordered(originValues);
-            SortTestHelpers.AssertIsOrdered(expectedValues);
-            var pq = new HeapPQ<int>(originValues);
-            //
-            for (int i = 0; i < expectedValues.Length; i++)
-            {
-                pq[i] = expectedValues[i];
-            }
-            for (int i = 0; i < expectedValues.Length; i++)
-            {
-                Assert.AreEqual(expectedValues[i], pq[i]);
-            }
             pq.Trace();
         }
     }

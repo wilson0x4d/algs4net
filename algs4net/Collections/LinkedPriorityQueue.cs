@@ -8,7 +8,7 @@ namespace algs4net.Collections
     /// as a basis for more advanced implementations.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class LinkedPQ<T> :
+    public class LinkedPriorityQueue<T> :
         CollectionBase<T>,
         IQueue<T>,
         IEnumerable<T>
@@ -28,17 +28,17 @@ namespace algs4net.Collections
 
         public override int Count => _items.Count;
 
-        public LinkedPQ()
+        public LinkedPriorityQueue()
             : this(default(IEnumerable<T>))
         {
         }
 
-        public LinkedPQ(IEnumerable<T> items)
+        public LinkedPriorityQueue(IEnumerable<T> items)
             : this(items, default(IComparer<T>))
         {
         }
 
-        public LinkedPQ(IEnumerable<T> items, IComparer<T> comparer)
+        public LinkedPriorityQueue(IEnumerable<T> items, IComparer<T> comparer)
         {
             _comparer = comparer ?? Comparers<T>.DefaultComparer;
             _items = new LinkedList<T>(null, _comparer);
