@@ -262,12 +262,6 @@ namespace algs4net.Collections
             {
                 throw new Exception("Key not found.");
             }
-            if (_equalityComparer.Equals(key, node.Key))
-            {
-                return (node.Left != null)
-                    ? node.Left.Count
-                    : 0;
-            }
             var cmp = _comparer.Compare(key, node.Key);
             if (cmp < 0)
             {
@@ -275,11 +269,17 @@ namespace algs4net.Collections
                     ? IndexOf(node.Left, key)
                     : IndexOf(node.Right, key);
             }
-            else
+            else if (cmp > 0)
             {
                 return node.Left != null
                     ? node.Left.Count + 1 + IndexOf(node.Right, key)
                     : 1 + IndexOf(node.Right, key);
+            }
+            else
+            { 
+                return (node.Left != null)
+                    ? node.Left.Count
+                    : 0;
             }
         }
 
@@ -314,13 +314,13 @@ namespace algs4net.Collections
                 var it = node.Right;
                 while (it.Left != null)
                 {
+                    it.Count--;
                     parent = it;
                     it = it.Left;
                 }
                 it.Left = node.Left;
                 if (parent != null)
                 {
-                    parent.Count--;
                     var rnode = it.Right;
                     it.Right = node.Right;
                     parent.Left = rnode;
@@ -366,18 +366,19 @@ namespace algs4net.Collections
                 value = default;
                 return false;
             }
-            if (_equalityComparer.Equals(key, node.Key))
-            {
-                value = node.Value;
-                return true;
-            }
-            if (_comparer.Compare(key, node.Key) < 0)
+            var cmp = _comparer.Compare(key, node.Key);
+            if (cmp < 0)
             {
                 return TryGetRecursive(node.Left, key, out value);
             }
-            else
+            else if (cmp > 0)
             {
                 return TryGetRecursive(node.Right, key, out value);
+            }
+            else
+            {
+                value = node.Value;
+                return true;
             }
         }
 
@@ -390,29 +391,42 @@ namespace algs4net.Collections
                 return false;
             }
 
-            if (_equalityComparer.Equals(key, node.Key))
+            var cmp = _comparer.Compare(key, node.Key);
+            if (cmp < 0)
             {
-                successor = RemoveInternal(node);
-                value = node.Value;
-                return true;
-            }
-            else if (_comparer.Compare(key, node.Key) < 0)
-            {
+                var org = node.Left.Count;
                 if (TryRemoveRecursive(node.Left, key, out value, out successor))
                 {
+                    node.Count -= org;
                     node.Left = successor;
+                    if (node.Left != null)
+                    {
+                        node.Count += node.Left.Count;
+                    }
+                    successor = node;
+                    return true;
+                }
+            }
+            else if (cmp > 0)
+            {
+                var org = node.Right.Count;
+                if (TryRemoveRecursive(node.Right, key, out value, out successor))
+                {
+                    node.Count -= org;
+                    node.Right = successor;
+                    if (node.Right != null)
+                    {
+                        node.Count += node.Right.Count;
+                    }
                     successor = node;
                     return true;
                 }
             }
             else
             {
-                if (TryRemoveRecursive(node.Right, key, out value, out successor))
-                {
-                    node.Right = successor;
-                    successor = node;
-                    return true;
-                }
+                successor = RemoveInternal(node);
+                value = node.Value;
+                return true;
             }
 
             return false;

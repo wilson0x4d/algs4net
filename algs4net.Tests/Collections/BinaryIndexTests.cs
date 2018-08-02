@@ -301,12 +301,34 @@ namespace algs4net.Tests.Collections
                 i++;
             }
 
+            // verify expecteed keys were not removed
             expectedKeys = expectedKeys.Except(removals).ToArray();
             foreach (var expectedKey in expectedKeys)
             {
                 Assert.IsTrue(index.TryGet(expectedKey, out int actualValue));
             }
+
+            // verify actual and calculated counts match
             Assert.AreEqual(expectedKeys.Length, index.Count());
+            Assert.AreEqual(expectedKeys.Length, index.Count);
+
+            // verify removals are actually removed
+            foreach (var removedKey in removals)
+            {
+                Assert.IsFalse(index.TryGet(removedKey, out int actualValue));
+            }
+
+            // verify rank consistency
+            i = 0;
+            expectedKeys = expectedKeys.OrderBy(e => e).ToArray();
+            foreach (var expectedKey in expectedKeys)
+            {
+                Assert.AreEqual(i, index.IndexOf(expectedKey));
+                Assert.IsTrue(index.TryGetByIndex(i, out int actualValue));
+                Assert.AreEqual(expectedKey, actualValue);
+                i++;
+            }
+
             index.Trace();
         }
     }
