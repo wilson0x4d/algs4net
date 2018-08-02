@@ -300,7 +300,15 @@ namespace algs4net.Collections
         private BinaryNode RemoveInternal(BinaryNode node)
         {
             // removal logic separate from search logic for readability and clarity
-            if (node.Left != null && node.Right != null)
+            if (node.Right == null)
+            {
+                return node.Left;
+            }
+            else if (node.Left == null)
+            {
+                return node.Right;
+            }
+            else
             {
                 var parent = default(BinaryNode);
                 var it = node.Right;
@@ -327,14 +335,6 @@ namespace algs4net.Collections
                     it.Count += it.Right.Count;
                 }
                 return it;
-            }
-            else if (node.Left != null)
-            {
-                return node.Left;
-            }
-            else
-            {
-                return node.Right;
             }
         }
 
