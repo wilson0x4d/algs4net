@@ -5,7 +5,7 @@ namespace algs4net.Collections
 {
     /// <summary>
     /// An interface for implementing indexed data (ie. Symnbol
-    /// Tables/Dictionaries/etc) where a key yields a value.
+    /// Tables/Dictionaries/etc) where keys yield values.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
@@ -14,7 +14,7 @@ namespace algs4net.Collections
     ///
     /// Iterating an Index yields all keys stored to the index, this behavior
     /// differs from typical data structure implementations which also yield
-    /// a value component (this is an intentional design decision intentional.)
+    /// a value component (this is an intentional design decision.)
     /// </remarks>
     public interface IIndex<TKey, TValue> :
         IEnumerable<TKey>

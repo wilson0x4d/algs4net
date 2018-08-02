@@ -390,11 +390,8 @@ namespace algs4net.Collections
             {
                 if (TryRemoveRecursive(node.Left, key, out value, out successor))
                 {
-                    if (successor != null)
-                    {
-                        node.Left = successor;
-                        successor = null;
-                    }
+                    node.Left = successor;
+                    successor = node;
                     return true;
                 }
             }
@@ -402,11 +399,8 @@ namespace algs4net.Collections
             {
                 if (TryRemoveRecursive(node.Right, key, out value, out successor))
                 {
-                    if (successor != null)
-                    {
-                        node.Right = successor;
-                        successor = null;
-                    }
+                    node.Right = successor;
+                    successor = node;
                     return true;
                 }
             }

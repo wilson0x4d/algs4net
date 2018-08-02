@@ -279,16 +279,34 @@ namespace algs4net.Tests.Collections
                 .ToArray();
             Assert.AreEqual(expectedKeys.Length, index.Count);
 
+            // NOTE: this test only removes half the keys, this is done to
+            // perform consistency checks:
+            //
+            // 1. to ensure remaining keys are returned as expected
+            // 2. to ensure removed keys are NOT returned
+            // 3. to ensure order is maintained
+            // 4. to verify ranks of remaining keys.
+            var removals = new LinkedList<int>();
             var i = 0;
             foreach (var expectedKey in expectedKeys)
             {
-                Assert.AreEqual(expectedKeys[i], expectedKey);
-                var expectedValue = expectedKeys[i] ^ 0x4d;
-                Assert.IsTrue(index.TryRemove(expectedKey, out int actualValue));
-                Assert.AreEqual(expectedValue, actualValue);
+                if ((i & 1) == 1)
+                {
+                    Assert.AreEqual(expectedKeys[i], expectedKey);
+                    var expectedValue = expectedKeys[i] ^ 0x4d;
+                    Assert.IsTrue(index.TryRemove(expectedKey, out int actualValue));
+                    Assert.AreEqual(expectedValue, actualValue);
+                    removals.Add(expectedKey);
+                }
                 i++;
             }
 
+            expectedKeys = expectedKeys.Except(removals).ToArray();
+            foreach (var expectedKey in expectedKeys)
+            {
+                Assert.IsTrue(index.TryGet(expectedKey, out int actualValue));
+            }
+            Assert.AreEqual(expectedKeys.Length, index.Count());
             index.Trace();
         }
     }
