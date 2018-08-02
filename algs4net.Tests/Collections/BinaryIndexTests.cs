@@ -254,7 +254,6 @@ namespace algs4net.Tests.Collections
             expectedKeys = expectedKeys.OrderBy(e => e).Distinct().ToArray();
             for (int i = 0; i < expectedKeys.Length; i++)
             {
-                Trace.Write($"{i},");
                 var expectedKey = expectedKeys[i];
                 Assert.IsTrue(index.TryGetByIndex(i, out int actualKey));
                 Assert.AreEqual(expectedKey, actualKey);

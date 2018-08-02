@@ -26,7 +26,7 @@ namespace algs4net.Tests.Sorts
             {
                 Assert.AreEqual(expected[i], set[i]);
             }
-            Trace.WriteLine(sort);
+            sort.Trace();
         }
 
         [TestMethod]
@@ -46,7 +46,7 @@ namespace algs4net.Tests.Sorts
             {
                 Assert.AreEqual(expected[i], set[i]);
             }
-            Trace.WriteLine(sort);
+            sort.Trace();
         }
     }
 }

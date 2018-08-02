@@ -19,7 +19,7 @@ namespace algs4net.Tests.Sorts
                 .ToArray();
             set = sort.Sort(set);
             set.AssertIsOrdered();
-            Trace.WriteLine(sort);
+            sort.Trace();
         }
 
         [TestMethod]
@@ -36,7 +36,7 @@ namespace algs4net.Tests.Sorts
                 .ToArray();
             set = sort.Sort(set);
             set.AssertIsOrdered();
-            Trace.WriteLine(sort);
+            sort.Trace();
         }
     }
 }

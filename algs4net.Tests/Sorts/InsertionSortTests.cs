@@ -31,7 +31,7 @@ namespace algs4net.Tests.Sorts
                 Assert.AreEqual(0, set[i].CompareTo(set[mid + i]));
             }
 
-            Trace.WriteLine(sort);
+            sort.Trace();
         }
 
         [TestMethod]
@@ -45,7 +45,7 @@ namespace algs4net.Tests.Sorts
 
             set.AssertIsOrdered();
 
-            Trace.WriteLine(sort);
+            sort.Trace();
         }
     }
 }
