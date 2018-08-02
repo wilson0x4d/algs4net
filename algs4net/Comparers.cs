@@ -45,10 +45,10 @@ namespace algs4net
         static Comparers()
         {
 #if !DEBUG
-            var defaultComparer = new ComparableComparer();
+            var defaultComparer = new BasicComparer();
             _defaultComparer = defaultComparer;
             _defaultEqualityComparer = defaultComparer;
-            var defaultInversionComparer = new ComparableInvestionComparer();
+            var defaultInversionComparer = new BasicInversionComparer();
             _defaultInversionComparer = defaultInversionComparer;
             _defaultInversionEqualityComparer = defaultInversionComparer;
 #else
