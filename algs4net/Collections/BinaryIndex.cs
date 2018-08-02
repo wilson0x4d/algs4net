@@ -19,7 +19,7 @@ namespace algs4net.Collections
 
         protected Node _root;
 
-        public int Count => _root == null ? 0 : _root.Count + 1;
+        public int Count => _root == null ? 0 : _root.Count;
 
         public BinaryIndex()
             : this(default(IComparer<TKey>))
@@ -265,7 +265,7 @@ namespace algs4net.Collections
             if (_equalityComparer.Equals(key, node.Key))
             {
                 return (node.Left != null)
-                    ? node.Left.Count + 1
+                    ? node.Left.Count
                     : 0;
             }
             var cmp = _comparer.Compare(key, node.Key);
@@ -278,7 +278,7 @@ namespace algs4net.Collections
             else
             {
                 return node.Left != null
-                    ? node.Left.Count + 2 + IndexOf(node.Right, key)
+                    ? node.Left.Count + 1 + IndexOf(node.Right, key)
                     : 1 + IndexOf(node.Right, key);
             }
         }
@@ -312,9 +312,19 @@ namespace algs4net.Collections
                 it.Left = node.Left;
                 if (parent != null)
                 {
+                    parent.Count--;
                     var rnode = it.Right;
                     it.Right = node.Right;
                     parent.Left = rnode;
+                }
+                it.Count = 1;
+                if (it.Left != null)
+                {
+                    it.Count += it.Left.Count;
+                }
+                if (it.Right != null)
+                {
+                    it.Count += it.Right.Count;
                 }
                 return it;
             }
@@ -331,7 +341,7 @@ namespace algs4net.Collections
         private bool TryGetByIndexRecursive(BinaryNode node, int index, out TKey key)
         {
             var precedingCount = node.Left != null
-                ? node.Left.Count + 1
+                ? node.Left.Count
                 : 0;
 
             if (precedingCount == index)
@@ -450,6 +460,7 @@ namespace algs4net.Collections
             {
                 Key = key;
                 Value = value;
+                Count = 1;
             }
 
             public int CompareTo(Node other)
