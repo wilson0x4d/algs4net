@@ -181,12 +181,8 @@ namespace algs4net.Collections
                 while (true)
                 {
                     stack.Push(current);
-                    if (_equalityComparer.Equals(key, current.Key))
-                    {
-                        current.Value = value;
-                        return;
-                    }
-                    if (key.CompareTo(current.Key) < 0)
+                    var cmp = key.CompareTo(current.Key);
+                    if (cmp < 0)
                     {
                         if (current.Left == null)
                         {
@@ -198,7 +194,7 @@ namespace algs4net.Collections
                             current = current.Left;
                         }
                     }
-                    else
+                    else if (cmp > 0)
                     {
                         if (current.Right == null)
                         {
@@ -209,6 +205,11 @@ namespace algs4net.Collections
                         {
                             current = current.Right;
                         }
+                    }
+                    else
+                    {
+                        current.Value = value;
+                        return;
                     }
                 }
                 while (stack.Count > 0)
