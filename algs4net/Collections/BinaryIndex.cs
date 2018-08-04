@@ -128,7 +128,7 @@ namespace algs4net.Collections
 
         public bool TryGetByIndex(int index, out TKey key)
         {
-            if (TryGetByIndexRecursive(_root as BinaryNode, index, out BinaryNode result))
+            if (TryGetByIndex(_root as BinaryNode, index, out BinaryNode result))
             {
                 key = result.Key;
                 return true;
@@ -206,7 +206,7 @@ namespace algs4net.Collections
 
         public virtual bool TryGetValueByIndex(int index, out TValue value)
         {
-            if (TryGetByIndexRecursive(_root as BinaryNode, index, out BinaryNode result))
+            if (TryGetByIndex(_root as BinaryNode, index, out BinaryNode result))
             {
                 value = result.Value;
                 return true;
@@ -421,24 +421,27 @@ namespace algs4net.Collections
             }
         }
 
-        private bool TryGetByIndexRecursive(BinaryNode node, int index, out BinaryNode target)
+        private bool TryGetByIndex(BinaryNode node, int index, out BinaryNode target)
         {
-            var precedingCount = node.Left != null
-                ? node.Left.Count
-                : 0;
-
-            if (precedingCount == index)
+            while (true)
             {
-                target = node;
-                return true;
-            }
-            else if (precedingCount < index)
-            {
-                return TryGetByIndexRecursive(node.Right, index - precedingCount - 1, out target);
-            }
-            else
-            {
-                return TryGetByIndexRecursive(node.Left, index, out target);
+                var precedingCount = node.Left != null
+                    ? node.Left.Count
+                    : 0;
+                if (precedingCount == index)
+                {
+                    target = node;
+                    return true;
+                }
+                else if (precedingCount < index)
+                {
+                    index = index - precedingCount - 1;
+                    node = node.Right;
+                }
+                else
+                {
+                    node = node.Left;
+                }
             }
         }
 
