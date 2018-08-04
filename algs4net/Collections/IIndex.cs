@@ -17,13 +17,11 @@ namespace algs4net.Collections
     /// a value component (this is an intentional design decision.)
     /// </remarks>
     public interface IIndex<TKey, TValue> :
+        IBinarySearchTree<TKey, TValue>,
         IEnumerable<TKey>
         where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        TValue this[TKey key] { get; set; }
 
-        bool TryGet(TKey key, out TValue value);
 
-        bool TryRemove(TKey key, out TValue value);
     }
 }

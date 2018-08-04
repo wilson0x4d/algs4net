@@ -19,7 +19,7 @@ namespace algs4net.Collections
         {
             get
             {
-                if (TryGet(key, out TValue value))
+                if (TryGetValue(key, out TValue value))
                 {
                     return value;
                 }
@@ -46,7 +46,7 @@ namespace algs4net.Collections
             return TryRemove(key, out TValue value);
         }
 
-        public bool TryGet(TKey key, out TValue value)
+        public bool TryGetValue(TKey key, out TValue value)
         {
             foreach (var entry in _entries)
             {
@@ -62,7 +62,7 @@ namespace algs4net.Collections
 
         public bool TryRemove(TKey key, out TValue value)
         {
-            return TryGet(key, out value)
+            return TryGetValue(key, out value)
                 && _entries.Remove(new IndexEntry(key, value));
         }
 

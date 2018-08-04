@@ -41,7 +41,7 @@ namespace algs4net.Collections
         {
             get
             {
-                if (TryGet(key, out TValue value))
+                if (TryGetValue(key, out TValue value))
                 {
                     return value;
                 }
@@ -55,7 +55,7 @@ namespace algs4net.Collections
 
         public virtual void Add(TKey key, TValue value)
         {
-            if (TryGet(key, out TValue existingValue))
+            if (TryGetValue(key, out TValue existingValue))
             {
                 throw new InvalidOperationException("Key already exists.");
             }
@@ -126,7 +126,7 @@ namespace algs4net.Collections
             return Min(_root as BinaryNode).Key;
         }
 
-        public virtual bool TryGet(TKey key, out TValue value)
+        public virtual bool TryGetValue(TKey key, out TValue value)
         {
             return TryGetRecursive(_root as BinaryNode, key, out value);
         }
