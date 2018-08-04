@@ -21,7 +21,7 @@ namespace algs4net.Sorts
             _comparer = comparer ?? Comparers<T>.DefaultComparer;
         }
 
-        public virtual void Exchange(T[] input, int leftIndex, int rightIndex)
+        protected virtual void Exchange(T[] input, int leftIndex, int rightIndex)
         {
 #if DEBUG
             _exchangeCount++;
