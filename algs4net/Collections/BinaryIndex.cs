@@ -85,14 +85,9 @@ namespace algs4net.Collections
 
         public virtual IEnumerator<TKey> GetEnumerator()
         {
-            if (_root == null)
+            if (_root != null)
             {
-                yield break;
-            }
-            else
-            {
-                // TODO: non-recursive enumerator (better run time&space)
-                foreach (var node in EnumerateRecursive(_root as BinaryNode))
+                foreach (var node in Enumerate(_root as BinaryNode))
                 {
                     yield return node.Key;
                 }
@@ -311,22 +306,32 @@ namespace algs4net.Collections
                     : Ceil(node.Right, key);
         }
 
-        private IEnumerable<BinaryNode> EnumerateRecursive(BinaryNode node)
+        private IEnumerable<BinaryNode> Enumerate(BinaryNode node)
         {
-            if (node.Left != null)
+            var stack = new Stack<BinaryNodeEnumeratorState>();
+            var state = new BinaryNodeEnumeratorState { Node = node, Direction = BinaryNodeEnumeratorState.EnumeratorStage.Explore };
+            while (state != null)
             {
-                foreach (var next in EnumerateRecursive(node.Left))
+                node = state.Node;
+                if (state.Direction == BinaryNodeEnumeratorState.EnumeratorStage.Yield)
                 {
-                    yield return next;
+                    yield return node;
                 }
-            }
-            yield return node;
-            if (node.Right != null)
-            {
-                foreach (var next in EnumerateRecursive(node.Right))
+                else
                 {
-                    yield return next;
+                    do
+                    {
+                        if (node.Right != null)
+                        {
+                            stack.Push(new BinaryNodeEnumeratorState { Node = node.Right, Direction = BinaryNodeEnumeratorState.EnumeratorStage.Explore });
+                        }
+                        stack.Push(new BinaryNodeEnumeratorState { Node = node, Direction = BinaryNodeEnumeratorState.EnumeratorStage.Yield });
+                        node = node.Left;
+                    } while (node != null);
                 }
+                state = stack.Count > 0
+                    ? stack.Pop()
+                    : null;
             }
         }
 
@@ -571,6 +576,34 @@ namespace algs4net.Collections
             public override string ToString()
             {
                 return $"{Key}:{Value}";
+            }
+        }
+
+        /// <summary> A state helper so we can avoid stack fill && spill
+        /// during in-order enumeration. </summary>
+        private sealed class BinaryNodeEnumeratorState :
+            IComparable<BinaryNodeEnumeratorState>
+        {
+            public EnumeratorStage Direction { get; set; }
+
+            public BinaryNode Node { get; set; }
+
+            public int CompareTo(BinaryNodeEnumeratorState other)
+            {
+                return Node.Key.CompareTo(other.Node.Key);
+            }
+
+            internal enum EnumeratorStage
+            {
+                /// <summary>
+                /// Explore the Node on Next Step
+                /// </summary>
+                Explore,
+
+                /// <summary>
+                /// Yield the Node on Next Step
+                /// </summary>
+                Yield
             }
         }
     }
