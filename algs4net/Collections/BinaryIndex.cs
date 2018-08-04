@@ -126,14 +126,96 @@ namespace algs4net.Collections
             return Min(_root as BinaryNode).Key;
         }
 
-        public virtual bool TryGetValue(TKey key, out TValue value)
-        {
-            return TryGetRecursive(_root as BinaryNode, key, out value);
-        }
-
         public bool TryGetByIndex(int index, out TKey key)
         {
-            return TryGetByIndexRecursive(_root as BinaryNode, index, out key);
+            if (TryGetByIndexRecursive(_root as BinaryNode, index, out BinaryNode result))
+            {
+                key = result.Key;
+                return true;
+            }
+            else
+            {
+                key = default;
+                return false;
+            }
+        }
+
+        public bool TryGetRange(TKey from, TKey to, out IEnumerable<TKey> keys)
+        {
+            // NOTE: there are a few ways to implement this call, this
+            // variant is sufficiently fast without being excessively complex
+            var lo = IndexOf(from);
+            var hi = IndexOf(to);
+            var inc = (hi >= lo) ? 1 : -1;
+            var len = (inc * (hi - lo)) + 1;
+            if (len == 0)
+            {
+                keys = default;
+                return false;
+            }
+            var L_keys = new TKey[len];
+            var k = 0;
+            for (int i = lo; i <= hi; i += inc)
+            {
+                TryGetByIndex(i, out TKey key);
+                L_keys[k] = key;
+                k++;
+            }
+            keys = L_keys;
+            return true;
+        }
+
+        public bool TryGetRangeValues(TKey from, TKey to, out IEnumerable<TValue> values)
+        {
+            // NOTE: there are a few ways to implement this call, this
+            // variant is sufficiently fast without being excessively complex
+            var lo = IndexOf(from);
+            var hi = IndexOf(to);
+            var inc = (hi >= lo) ? 1 : -1;
+            var len = (inc * (hi - lo)) + 1;
+            if (len == 0)
+            {
+                values = default;
+                return false;
+            }
+            var L_values = new TValue[len];
+            var k = 0;
+            for (int i = lo; i <= hi; i += inc)
+            {
+                TryGetValueByIndex(i, out TValue value);
+                L_values[k] = value;
+                k++;
+            }
+            values = L_values;
+            return true;
+        }
+
+        public virtual bool TryGetValue(TKey key, out TValue value)
+        {
+            if (TryGetRecursive(_root as BinaryNode, key, out BinaryNode result))
+            {
+                value = result.Value;
+                return true;
+            }
+            else
+            {
+                value = default;
+                return false;
+            }
+        }
+
+        public virtual bool TryGetValueByIndex(int index, out TValue value)
+        {
+            if (TryGetByIndexRecursive(_root as BinaryNode, index, out BinaryNode result))
+            {
+                value = result.Value;
+                return true;
+            }
+            else
+            {
+                value = default;
+                return false;
+            }
         }
 
         public virtual bool TryRemove(TKey key, out TValue value)
@@ -277,7 +359,7 @@ namespace algs4net.Collections
                     : 1 + IndexOf(node.Right, key);
             }
             else
-            { 
+            {
                 return (node.Left != null)
                     ? node.Left.Count
                     : 0;
@@ -339,7 +421,7 @@ namespace algs4net.Collections
             }
         }
 
-        private bool TryGetByIndexRecursive(BinaryNode node, int index, out TKey key)
+        private bool TryGetByIndexRecursive(BinaryNode node, int index, out BinaryNode target)
         {
             var precedingCount = node.Left != null
                 ? node.Left.Count
@@ -347,38 +429,38 @@ namespace algs4net.Collections
 
             if (precedingCount == index)
             {
-                key = node.Key;
+                target = node;
                 return true;
             }
             else if (precedingCount < index)
             {
-                return TryGetByIndexRecursive(node.Right, index - precedingCount - 1, out key);
+                return TryGetByIndexRecursive(node.Right, index - precedingCount - 1, out target);
             }
             else
             {
-                return TryGetByIndexRecursive(node.Left, index, out key);
+                return TryGetByIndexRecursive(node.Left, index, out target);
             }
         }
 
-        private bool TryGetRecursive(BinaryNode node, TKey key, out TValue value)
+        private bool TryGetRecursive(BinaryNode node, TKey key, out BinaryNode target)
         {
             if (node == null)
             {
-                value = default;
+                target = default;
                 return false;
             }
             var cmp = _comparer.Compare(key, node.Key);
             if (cmp < 0)
             {
-                return TryGetRecursive(node.Left, key, out value);
+                return TryGetRecursive(node.Left, key, out target);
             }
             else if (cmp > 0)
             {
-                return TryGetRecursive(node.Right, key, out value);
+                return TryGetRecursive(node.Right, key, out target);
             }
             else
             {
-                value = node.Value;
+                target = node;
                 return true;
             }
         }

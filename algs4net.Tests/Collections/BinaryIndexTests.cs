@@ -40,6 +40,23 @@ namespace algs4net.Tests.Collections
         }
 
         [TestMethod]
+        public void BinaryIndex_Count_IsAccurate()
+        {
+            var expectedKeys = Generators.IntegralNumberGenerator
+                .YieldPredictableSeries(SET_SIZE)
+                .ToArray();
+            var index = new BinaryIndex<int, int>();
+            var i = 0;
+            foreach (var key in expectedKeys)
+            {
+                i++;
+                index[key] = key ^ 0x4d;
+                Assert.AreEqual(i, index.Count);
+            }
+            Assert.AreEqual(expectedKeys.Length, index.Count);
+        }
+
+        [TestMethod]
         public void BinaryIndex_Floor_IsPredictableWithSingleItem()
         {
             var index = new BinaryIndex<int, int>();
@@ -214,7 +231,130 @@ namespace algs4net.Tests.Collections
         }
 
         [TestMethod]
-        public void BinaryIndex_TryGet_YieldsExpectedValues()
+        public void BinaryIndex_TryGetByIndex_YieldsExpectedKeys()
+        {
+            var expectedKeys = Generators.IntegralNumberGenerator
+                .YieldPredictableSeries(SET_SIZE)
+                .ToArray();
+            var index = new BinaryIndex<int, int>();
+            foreach (var v in expectedKeys)
+            {
+                index[v] = v;
+            }
+            expectedKeys = expectedKeys.OrderBy(e => e).Distinct().ToArray();
+            for (int i = 0; i < expectedKeys.Length; i++)
+            {
+                var expectedKey = expectedKeys[i];
+                Assert.IsTrue(index.TryGetByIndex(i, out int actualKey));
+                Assert.AreEqual(expectedKey, actualKey);
+            }
+            index.Trace();
+        }
+
+        [TestMethod]
+        public void BinaryIndex_TryGetRange_YieldsExpectedSets()
+        {
+            var expectedKeys = Generators.IntegralNumberGenerator
+                .YieldPredictableSeries(SET_SIZE)
+                .ToArray();
+            var index = new BinaryIndex<int, int>();
+            foreach (var key in expectedKeys)
+            {
+                index[key] = key ^ 0x4d;
+            }
+            Assert.AreEqual(expectedKeys.Length, index.Count);
+
+            expectedKeys = expectedKeys.OrderBy(e => e).Distinct().ToArray();
+            var expectedRanges = Enumerable.Range(2, 4)
+                .SelectMany(e => new[]
+                    {
+                        expectedKeys.Skip(SET_SIZE / e).Take(SET_SIZE / (e + 1)).ToArray(),
+                        expectedKeys.Skip(SET_SIZE - (SET_SIZE / e)).Take(SET_SIZE / (e+1)).ToArray()
+                    })
+                .ToArray();
+
+            foreach (var expectedRange in expectedRanges)
+            {
+                Assert.IsTrue(index.TryGetRange(expectedRange.First(), expectedRange.Last(), out System.Collections.Generic.IEnumerable<int> actualRange));
+                Assert.AreEqual(expectedRange.Count(), actualRange.Count());
+
+                // verify ONLY expected keys are present
+                int i = 0;
+                foreach (var actualKey in actualRange)
+                {
+                    var expectedKey = expectedRange.ElementAt(i);
+                    Assert.AreEqual(expectedKey, actualKey);
+                    i++;
+                }
+                Assert.AreEqual(expectedRange.Length, i);
+
+                // verify ALL expected keys are present
+                i = 0;
+                foreach (var expectedKey in expectedRange)
+                {
+                    var actualKey = actualRange.ElementAt(i);
+                    Assert.AreEqual(expectedKey, actualKey);
+                    i++;
+                }
+                Assert.AreEqual(expectedRange.Length, i);
+            }
+
+            index.Trace();
+        }
+
+        [TestMethod]
+        public void BinaryIndex_TryGetRangeValues_YieldsExpectedSets()
+        {
+            var expectedKeys = Generators.IntegralNumberGenerator
+                .YieldPredictableSeries(SET_SIZE)
+                .ToArray();
+            var index = new BinaryIndex<int, int>();
+            foreach (var key in expectedKeys)
+            {
+                index[key] = key ^ 0x4d;
+            }
+            Assert.AreEqual(expectedKeys.Length, index.Count);
+
+            expectedKeys = expectedKeys.OrderBy(e => e).Distinct().ToArray();
+            var expectedRanges = Enumerable.Range(2, 4)
+                .SelectMany(e => new[]
+                    {
+                        expectedKeys.Skip(SET_SIZE / e).Take(SET_SIZE / (e + 1)).ToArray(),
+                        expectedKeys.Skip(SET_SIZE - (SET_SIZE / e)).Take(SET_SIZE / (e+1)).ToArray()
+                    })
+                .ToArray();
+
+            foreach (var expectedRange in expectedRanges)
+            {
+                Assert.IsTrue(index.TryGetRangeValues(expectedRange.First(), expectedRange.Last(), out System.Collections.Generic.IEnumerable<int> actualRange));
+                Assert.AreEqual(expectedRange.Count(), actualRange.Count());
+
+                // verify ONLY expected keys are present
+                int i = 0;
+                foreach (var actualValue in actualRange)
+                {
+                    var expectedValue = expectedRange.ElementAt(i) ^ 0x4d;
+                    Assert.AreEqual(expectedValue, actualValue);
+                    i++;
+                }
+                Assert.AreEqual(expectedRange.Length, i);
+
+                // verify ALL expected keys are present
+                i = 0;
+                foreach (var expectedKey in expectedRange)
+                {
+                    var actualValue = actualRange.ElementAt(i);
+                    Assert.AreEqual(expectedKey ^ 0x4d, actualValue);
+                    i++;
+                }
+                Assert.AreEqual(expectedRange.Length, i);
+            }
+
+            index.Trace();
+        }
+
+        [TestMethod]
+        public void BinaryIndex_TryGetValue_YieldsExpectedValues()
         {
             var expectedKeys = Generators.IntegralNumberGenerator
                 .YieldPredictableSeries(SET_SIZE)
@@ -233,30 +373,9 @@ namespace algs4net.Tests.Collections
             foreach (var expectedKey in expectedKeys)
             {
                 Assert.AreEqual(expectedKeys[i], expectedKey);
-                Assert.IsTrue(index.TryGet(expectedKey, out int actualValue));
+                Assert.IsTrue(index.TryGetValue(expectedKey, out int actualValue));
                 Assert.AreEqual(expectedKey ^ 0x4d, actualValue);
                 i++;
-            }
-            index.Trace();
-        }
-
-        [TestMethod]
-        public void BinaryIndex_TryGetByIndex_YieldsExpectedKeys()
-        {
-            var expectedKeys = Generators.IntegralNumberGenerator
-                .YieldPredictableSeries(SET_SIZE)
-                .ToArray();
-            var index = new BinaryIndex<int, int>();
-            foreach (var v in expectedKeys)
-            {
-                index[v] = v;
-            }
-            expectedKeys = expectedKeys.OrderBy(e => e).Distinct().ToArray();
-            for (int i = 0; i < expectedKeys.Length; i++)
-            {
-                var expectedKey = expectedKeys[i];
-                Assert.IsTrue(index.TryGetByIndex(i, out int actualKey));
-                Assert.AreEqual(expectedKey, actualKey);
             }
             index.Trace();
         }
@@ -305,7 +424,7 @@ namespace algs4net.Tests.Collections
             expectedKeys = expectedKeys.Except(removals).ToArray();
             foreach (var expectedKey in expectedKeys)
             {
-                Assert.IsTrue(index.TryGet(expectedKey, out int actualValue));
+                Assert.IsTrue(index.TryGetValue(expectedKey, out int actualValue));
             }
 
             // verify actual and calculated counts match
@@ -315,7 +434,7 @@ namespace algs4net.Tests.Collections
             // verify removals are actually removed
             foreach (var removedKey in removals)
             {
-                Assert.IsFalse(index.TryGet(removedKey, out int actualValue));
+                Assert.IsFalse(index.TryGetValue(removedKey, out int actualValue));
             }
 
             // verify rank consistency
