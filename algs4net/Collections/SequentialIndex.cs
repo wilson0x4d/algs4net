@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace algs4net.Collections
 {
@@ -33,12 +34,48 @@ namespace algs4net.Collections
             }
         }
 
+        public int Count => _entries.Count;
+
+        public TKey Ceil(TKey key)
+        {
+            return _entries.FirstOrDefault(e => e.Key.CompareTo(key) >= 0).Key;
+        }
+
+        public TKey Floor(TKey key)
+        {
+            return _entries.LastOrDefault(e => e.Key.CompareTo(key) <= 0).Key;
+        }
+
         public IEnumerator<TKey> GetEnumerator()
         {
             foreach (var entry in _entries)
             {
                 yield return entry.Key;
             }
+        }
+
+        public int IndexOf(TKey key)
+        {
+            var i = -1;
+            foreach (var entry in _entries)
+            {
+                i++;
+                if (entry.Key.CompareTo(key) == 0)
+                {
+                    return i;
+                }
+            }
+            return i;
+        }
+
+        public TKey Max()
+        {
+            return _entries.Max().Key;
+        }
+
+        public TKey Min()
+        {
+            return _entries.Min().Key;
         }
 
         public bool Remove(TKey key)
@@ -58,6 +95,32 @@ namespace algs4net.Collections
             }
             value = default;
             return false;
+        }
+
+        public bool TryGetByIndex(int index, out TKey key)
+        {
+            var entry = _entries.ElementAtOrDefault(index);
+            if (entry != default)
+            {
+                key = entry.Key;
+                return true;
+            }
+            else
+            {
+                key = default;
+                return false;
+            }
+        }
+
+        public bool TryGetRange(TKey from, TKey to, out IEnumerable<TKey> keys)
+        {
+            keys = _entries
+                .Where(entry =>
+                    entry.Key.CompareTo(from) >= 0
+                    && entry.Key.CompareTo(to) <= 0)
+                .Select(e => e.Key)
+                .ToArray();
+            return keys.Count() > 0;
         }
 
         public bool TryRemove(TKey key, out TValue value)

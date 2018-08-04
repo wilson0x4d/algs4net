@@ -21,7 +21,20 @@ namespace algs4net.Collections
         IEnumerable<TKey>
         where TKey : IComparable<TKey>, IEquatable<TKey>
     {
+        int Count { get; }
 
+        TKey Ceil(TKey key);
 
+        TKey Floor(TKey key);
+
+        int IndexOf(TKey key);
+
+        TKey Max();
+
+        TKey Min();
+
+        bool TryGetByIndex(int index, out TKey key);
+
+        bool TryGetRange(TKey from, TKey to, out IEnumerable<TKey> keys);
     }
 }
