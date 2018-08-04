@@ -32,7 +32,7 @@ namespace algs4net.Collections
         /// a "dirty flag" meant for use during enumeration to detect
         /// collection changes
         /// </summary>
-        protected ulong _version = 0;
+        protected ulong _version = 0L;
 
         public override int Count => _count;
 
@@ -53,6 +53,22 @@ namespace algs4net.Collections
             {
                 AddRange(items);
             }
+        }
+
+        public virtual bool Contains(T item)
+        {
+            var node = _head;
+            var i = 0;
+            while (i < _count)
+            {
+                if (item.Equals(node.Value))
+                {
+                    return true;
+                }
+                node = node.Next;
+                i++;
+            }
+            return false;
         }
 
         public virtual void Add(T item)
@@ -334,7 +350,7 @@ namespace algs4net.Collections
         }
 
         /// <summary>
-        /// Removes the first occurrence with mathing value.
+        /// Removes the first occurrence of matching value.
         /// </summary>
         /// <param name="value"></param>
         public virtual bool Remove(T value)
@@ -344,7 +360,7 @@ namespace algs4net.Collections
                 var current = _head;
                 do
                 {
-                    if (current.Value.CompareTo(value) == 0)
+                    if (value.CompareTo(current.Value) == 0)
                     {
                         current.Next.Previous = current.Previous;
                         current.Previous.Next = current.Next;

@@ -9,23 +9,41 @@ namespace algs4net.Tests.Collections
     [TestClass]
     public class LinkedListTests
     {
+        private static int SET_SIZE = 25000; // TODO: relo/share all 'index' impls
+
         [TestMethod]
         public void LinkedList_Add_PreservesOrder()
         {
-            var expected = new[] { 1, 3, 5, 7, 9, 11 };
+            var expectedItems = Generators.IntegralNumberGenerator
+                .YieldPredictableSeries(SET_SIZE)
+                .ToArray();
             var list = new LinkedList<int>();
-            foreach (var item in expected)
+            foreach (var item in expectedItems)
             {
                 list.Add(item);
             }
-            Assert.AreEqual(expected.Length, list.Count);
+            Assert.AreEqual(expectedItems.Length, list.Count);
             var i = 0;
             foreach (var item in list)
             {
-                Assert.AreEqual(expected[i], item);
+                Assert.AreEqual(expectedItems[i], item);
                 i++;
             }
-            Assert.AreEqual(expected.Length, i);
+            Assert.AreEqual(expectedItems.Length, i);
+            list.Trace();
+        }
+
+        [TestMethod]
+        public void LinkedList_Contains_YieldsExpectedResult()
+        {
+            var expectedItems = Generators.IntegralNumberGenerator
+                .YieldPredictableSeries(SET_SIZE)
+                .ToArray();
+            var list = new LinkedList<int>(expectedItems);
+            foreach (var v in expectedItems)
+            {
+                Assert.IsTrue(list.Contains(v));
+            }
             list.Trace();
         }
 
@@ -33,17 +51,19 @@ namespace algs4net.Tests.Collections
         [TestMethod]
         public void LinkedList_AddRange_PreservesOrder()
         {
-            var expected = new[] { 1, 3, 5, 7, 9, 11 };
+            var expectedItems = Generators.IntegralNumberGenerator
+                .YieldPredictableSeries(SET_SIZE)
+                .ToArray();
             var list = new LinkedList<int>();
-            list.AddRange(expected);
-            Assert.AreEqual(expected.Length, list.Count);
+            list.AddRange(expectedItems);
+            Assert.AreEqual(expectedItems.Length, list.Count);
             var i = 0;
             foreach (var item in list)
             {
-                Assert.AreEqual(expected[i], item);
+                Assert.AreEqual(expectedItems[i], item);
                 i++;
             }
-            Assert.AreEqual(expected.Length, i);
+            Assert.AreEqual(expectedItems.Length, i);
             list.Trace();
         }
 
@@ -57,7 +77,9 @@ namespace algs4net.Tests.Collections
         [TestMethod]
         public void LinkedList_ctor_CanConstructPopulatedList()
         {
-            var expected = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
+            var expected = Generators.IntegralNumberGenerator
+                .YieldPredictableSeries(SET_SIZE)
+                .ToArray();
             var list = new LinkedList<int>(expected);
             Assert.AreEqual(expected.Length, list.Count);
             list.Trace();
@@ -67,14 +89,16 @@ namespace algs4net.Tests.Collections
         [ExpectedException(typeof(NotSupportedException))]
         public void LinkedList_GetEnumerator_ThrowsWhenCollectionModified()
         {
-            var expected = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
+            var expected = Generators.IntegralNumberGenerator
+                .YieldPredictableSeries(SET_SIZE)
+                .ToArray();
             var list = new LinkedList<int>(expected);
             var i = 0;
             foreach (var item in list)
             {
                 Assert.AreEqual(expected[i], item);
                 i++;
-                list.Remove(expected.Length / 2);
+                list.Remove(expected[expected.Length / 2]);
             }
             Assert.AreEqual(expected.Length, i);
             list.Trace();
@@ -83,7 +107,9 @@ namespace algs4net.Tests.Collections
         [TestMethod]
         public void LinkedList_GetEnumerator_YieldsValues()
         {
-            var expected = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
+            var expected = Generators.IntegralNumberGenerator
+                .YieldPredictableSeries(SET_SIZE)
+                .ToArray();
             var list = new LinkedList<int>(expected);
             var i = 0;
             foreach (var item in list)
@@ -178,7 +204,9 @@ namespace algs4net.Tests.Collections
         [TestMethod]
         public void LinkedList_Merge_FromEmptyContainer()
         {
-            var expected = new[] { 1, 3, 5, 7, 9, 11 };
+            var expected = Generators.IntegralNumberGenerator
+                .YieldPredictableSeries(SET_SIZE)
+                .ToArray();
             var list1 = new LinkedList<int>(expected);
             var list2 = new LinkedList<int>();
             list1.Merge(list2);
@@ -215,7 +243,9 @@ namespace algs4net.Tests.Collections
         [TestMethod]
         public void LinkedList_Merge_ToEmptyContainer()
         {
-            var expected = new[] { 1, 3, 5, 7, 9, 11 };
+            var expected = Generators.IntegralNumberGenerator
+                .YieldPredictableSeries(SET_SIZE)
+                .ToArray();
             var list1 = new LinkedList<int>();
             var list2 = new LinkedList<int>(expected);
             list1.Merge(list2);
